@@ -523,40 +523,16 @@ class GitalkComponent extends Component {
     )
   }
   header () {
-    const { user, comment, isCreating } = this.state
+    const { user, issue, comment, isCreating } = this.state
     return (
       <div className="gt-header" key="header">
-        {user ?
-          <Avatar className="gt-header-avatar" src={user.avatar_url} /> :
-          <a className="gt-avatar-github" onMouseDown={this.handleLogin}>
-            <Svg className="gt-ico-github" name="github"/>
-          </a>
-        }
-        <div className="gt-header-comment">
-          <textarea
-            ref={t => { this.commentEL = t }}
-            className="gt-header-textarea"
-            value={comment}
-            onChange={this.handleCommentChange}
-            onFocus={this.handleCommentFocus}
-            onBlur={this.handleCommentBlur}
-            onKeyDown={this.handleCommentKeyDown}
-            placeholder={this.i18n.t('leave-a-comment')}
-          />
-          <div className="gt-header-controls">
-            <a className="gt-header-controls-tip" href="https://guides.github.com/features/mastering-markdown/" target="_blank">
-              <Svg className="gt-ico-tip" name="tip" text={this.i18n.t('support-markdown')}/>
-            </a>
-            {user && <Button
-              getRef={this.getRef}
-              className="gt-btn-public"
-              onMouseDown={this.handleCommentCreate}
-              text={this.i18n.t('comment')}
-              isLoading={isCreating}
-            />}
-            {!user && <Button className="gt-btn-login" onMouseDown={this.handleLogin} text={this.i18n.t('login-with-github')} />}
-          </div>
-        </div>
+        <Svg className="gt-ico-tip" name="tip"/> &nbsp;
+        <span>
+          Comments are hosted on GitHub using GitHub issues. Leave a comment by directly posting on &nbsp;
+          <span dangerouslySetInnerHTML={{
+            __html: `<a href="${issue && issue.html_url}" target="_blank">the GitHub issue for this blog post</a>`
+          }}/>. :)
+        </span>
       </div>
     )
   }
@@ -609,10 +585,6 @@ class GitalkComponent extends Component {
           <div className="gt-popup">
             {user ? <Action className={`gt-action-sortasc${!isDesc ? ' is--active' : ''}`} onClick={this.handleSort('first')} text={this.i18n.t('sort-asc')}/> : null }
             {user ? <Action className={`gt-action-sortdesc${isDesc ? ' is--active' : ''}`} onClick={this.handleSort('last')} text={this.i18n.t('sort-desc')}/> : null }
-            {user ?
-              <Action className="gt-action-logout" onClick={this.handleLogout} text={this.i18n.t('logout')}/> :
-              <a className="gt-action gt-action-login" onMouseDown={this.handleLogin}>{this.i18n.t('login-with-github')}</a>
-            }
             <div className="gt-copyright">
               <a className="gt-link gt-link-project" href="https://github.com/gitalk/gitalk" target="_blank">Gitalk</a>
               <span className="gt-version">{GT_VERSION}</span>
